@@ -1,11 +1,30 @@
 import sys
 import pygame
+import random
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCORE_PER_ASTEROID
 from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+
+_starfield_cache = None
+
+def draw_background(screen: pygame.Surface):
+    global _starfield_cache
+    if _starfield_cache is None:
+        # Generate a starfield
+        _starfield_cache = []
+        for _ in range(100):
+            x = random.randint(0, SCREEN_WIDTH)
+            y = random.randint(0, SCREEN_HEIGHT)
+            brightness = random.randint(100, 255)
+            _starfield_cache.append((x, y, brightness))
+
+    screen.fill((10, 10, 20)) # RGB dark blue-black bg
+    # Draw stars
+    for x, y, brightness in _starfield_cache:
+        pygame.draw.circle(screen, (brightness, brightness, brightness), (x, y), 1)
 
 def main():
     VERSION = pygame.version.vernum
@@ -46,7 +65,9 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        screen.fill("black")
+        #screen.fill("black")
+        draw_background(screen)
+
         #player.draw(screen)
         for member in drawable:
             member.draw(screen)
