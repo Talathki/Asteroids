@@ -5,7 +5,7 @@ This is my asteroids project from a boot.dev course
 - [ ] Implement lives & respawning
 - [ ] Add explosion effect for asteroids
 - [x] Add acceleration to player movement
-    - [x] ~~~~~~~~~~~~++~~Remove++ Add some friction for player
+    - [x] ++Remove++ Add some friction for player
 - [x] Make objects wrap around the screen instead of disappearing
 - [x] Add a background image
 - [ ] Create different weapon types
