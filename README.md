@@ -1,7 +1,7 @@
 This is my asteroids project from a boot.dev course
 
 # ToDo:
-- [ ] Scoring system
+- [x] Scoring system
 - [ ] Implement lives & respawning
 - [ ] Add explosion effect for asteroids
 - [x] Add acceleration to player movement
@@ -10,10 +10,11 @@ This is my asteroids project from a boot.dev course
 - [x] Add a background image
 - [ ] Create different weapon types
 - [x] Make asteroids lumpy instead of round
-- [ ] Make ship have triangular hitbox instead of circular
+- [x] Make ship have triangular hitbox instead of circular
 - [ ] Add shield power-up
 - [ ] Add speed power-up
 - [ ] Add bombs that can be dropped
 - [ ] Add laser power up
 - [ ] Add pause screen / menu
-- [ ] Add game over screen / menu
+- [x] Add game over screen / menu
+    - [ ] Add ability to restart
