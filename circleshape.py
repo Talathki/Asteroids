@@ -28,6 +28,9 @@ class CircleShape(pygame.sprite.Sprite):
             return True
         return False
 
+    def collides_with_laser(self, other):
+        pass
+
     def wrap_around(self):
         if self.position.x < 0:
             self.position.x = SCREEN_WIDTH

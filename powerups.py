@@ -12,8 +12,8 @@ from constants import (
 class PowerUp(CircleShape):
     POWERUP_TYPES = ["laser", "shield", "rapid_shot", "scatter_shot", "triple_shot", "speed"]
 
-    def __init__(self, x, y, radius):
-        super().__init__(x, y, radius)
+    def __init__(self, x, y):
+        super().__init__(x, y, 15)
         self.powerup_type = random.choice(self.POWERUP_TYPES)
         self.rotation = 0.0
         self.rotation_speed = 90.0

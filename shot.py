@@ -55,13 +55,10 @@ class Laser(Shot):
         self.laser_end_position = self.position + (self.direction * self.laser_length)
 
     def draw(self, screen):
-        #laser_length = 500 # 500 pixels long
-        #direction = pygame.Vector2(0, 1).rotate(self.rotation) 
-        #start_position = self.position
-        #end_position = self.position + self.direction * self.laser_length
-
-        #pygame.draw.line(screen, "green", (int(start_position.x), int(start_position.y)), (int(end_position.x), int(end_position.y)), 2)
-        pygame.draw.line(screen, "green", self.laser_start_position, self.laser_end_position, self.width)
+        laser_start_pos = self.laser_start_position + self.direction
+        #laser_start_pos = self.laser_start_position + pygame.Vector2(0, -10)
+        pygame.draw.line(screen, "green", laser_start_pos, self.laser_end_position, self.width)
+        #pygame.draw.line(screen, "green", self.laser_start_position, self.laser_end_position, self.width)
 
     def update(self, dt):
         self.lifetime += dt

@@ -11,6 +11,7 @@ from constants import (
         PLAYER_SHOOT_COOLDOWN_SECONDS, 
         PLAYER_ACCELERATION,
         PLAYER_FRICTION,
+        SPEED_BOOST_MULTIPLIER,
         SCREEN_WIDTH, 
         SCREEN_HEIGHT
         )
@@ -20,9 +21,9 @@ from shot import Shot, Laser
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
-        self.rotation = 0
+        self.rotation = 0.0
 #        self.radius = PLAYER_RADIUS # initialized through CircleShape
-        self.shot_cooldown = 0
+        self.shot_cooldown = 0.0
         """Power ups"""
         self.laser_active = False
         self.shield_active = False
@@ -58,6 +59,10 @@ class Player(CircleShape):
     """ Draw the player """
     def draw(self, screen):
         pygame.draw.polygon(screen, "white", self.triangle(), LINE_WIDTH)
+        if self.shield_active:
+            pygame.draw.circle(
+                screen, (0, 150, 255, 100), self.position, self.radius + 5, 2
+            )
 
     """ Rotate player """
     def rotate(self, dt):
@@ -110,24 +115,6 @@ class Player(CircleShape):
     def move(self):
         self.position += self.velocity
 
-        # moved this logic to acceleration
-##        unit_vector: pygame.Vector2 = pygame.Vector2(0, 1)
-##        rotated_vector: pygame.Vector2 = unit_vector.rotate(self.rotation)
-###        acceleration = self.accelerate(dt) * dt
-##        rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
-##        #rotated_with_speed_vector = acceleration * PLAYER_SPEED * dt
-##        
-###        acceleration: pygame.Vector2 = (
-###                rotated_vector * PLAYER_ACCELERATION * dt
-###            )
-##
-###        self.velocity += acceleration
-##        
-##        self.position += rotated_with_speed_vector
-###        self.position *= self.accelerate(dt)
-###        self.position += acceleration * dt
-###        self.position += velocity * dt
-###        self.wrap_around()
         """Wrap around screen"""
         if self.position.x < 0:
             self.position.x = SCREEN_WIDTH
@@ -139,7 +126,8 @@ class Player(CircleShape):
             self.position.y = 0
 
     def accelerate(self, dt):
-        max_speed = PLAYER_MAX_SPEED
+#        speed_multiplier = SPEED_BOOST_MULTIPLIER if self.speed_active else 1.0
+        max_speed = PLAYER_MAX_SPEED * SPEED_BOOST_MULTIPLIER if self.speed_active else PLAYER_MAX_SPEED
         unit_vector: pygame.Vector2 = pygame.Vector2(0, 1)
         rotated_vector: pygame.Vector2 = unit_vector.rotate(self.rotation)
         acceleration: pygame.Vector2 = (
@@ -153,12 +141,14 @@ class Player(CircleShape):
     def shoot(self):
         # Add logic if a powerup is active
         cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
+        if self.speed_active:
+            cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS * 0.8
         if self.rapid_shot_active:
             cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS * 0.1
-        elif self.laser_active:
-            cooldown = 0
+        if self.laser_active:
+            cooldown = 0.0
 
-        if self.shot_cooldown > 0:
+        if self.shot_cooldown > 0.0:
             return
         self.shot_cooldown += cooldown
 
@@ -180,15 +170,12 @@ class Player(CircleShape):
                 )
         """ Laser """
         if self.laser_active:
-            shot = Laser(self.position.x, self.position.y, self.rotation)
-            shot.rotation = self.rotation
-    #        shot: Shot = Shot(self.position.x, self.position.y) 
-    #        shot.velocity = (
-    #            pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-    #        )
-#            shot.velocity = (
-#                pygame.Vector2(0, 1).rotate(self.rotation)
-#            )
+            # Shoots a laser while player holds button
+            laser = Laser(self.position.x, self.position.y, self.rotation)
+            #shot = Laser(self.position.x, self.position.y, self.rotation)
+            laser.rotation = self.rotation
+            #shot.rotation = self.rotation
+
         """ Standard Shot """
         if not (self.laser_active 
                 or self.triple_shot_active 
